@@ -1,0 +1,66 @@
+[
+  {
+    "enabled": false,
+    "side": "server",
+    "op": "add",
+    "file": "@game:itemtypes/toolhead/*.json",
+    "path": "creativeinventory/jsonpatches",
+    "value": []
+  },
+  {
+    "enabled": false,
+    "side": "server",
+    "op": "addeach",
+    "file": "@@game:itemtypes/toolhead/.+.json",
+    "path": "creativeinventory/jsonpatches/-",
+    "value": ["*-gold", "*-silver"]
+  },
+  {
+    "enabled": false,
+    "side": "server",
+    "op": "addmerge",
+    "file": "@game:itemtypes/*/arrowhead.json",
+    "path": "creativeinventory/jsonpatches",
+    "value": ["*-copper", "*-iron", "*-steel"]
+  },
+  {
+    "enabled": false,
+    "side": "server",
+    "op": "add",
+    "file": "game:itemtypes/toolhead/arrowhead.json",
+    "path": "creativeinventory/temp",
+    "value": []
+  },
+  {
+    "enabled": false,
+    "side": "server",
+    "op": "copy",
+    "file": "game:itemtypes/toolhead/arrowhead.json",
+    "frompath": "creativeinventory/jsonpatches/4",
+    "path": "creativeinventory/temp/-"
+  },
+  {
+    "enabled": false,
+    "side": "server",
+    "op": "move",
+    "file": "game:itemtypes/toolhead/arrowhead.json",
+    "frompath": "creativeinventory/jsonpatches/3",
+    "path": "creativeinventory/temp/-"
+  },
+  {
+    "enabled": false,
+    "side": "server",
+    "op": "move",
+    "file": "game:itemtypes/toolhead/arrowhead.json",
+    "frompath": "creativeinventory/jsonpatches/2",
+    "path": "creativeinventory/temp/-"
+  },
+  {
+    "enabled": false,
+    "side": "server",
+    "op": "move",
+    "file": "game:itemtypes/toolhead/arrowhead.json",
+    "frompath": "creativeinventory/temp/1",
+    "path": "creativeinventory/jsonpatches/-"
+  }
+]

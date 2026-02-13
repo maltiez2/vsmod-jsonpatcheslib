@@ -3,7 +3,7 @@
   <PropertyGroup>
     <ModName>Json Patches lib</ModName>
     <ModType>code</ModType>
-    <ModVersion>0.1.0</ModVersion>
+    <ModVersion>1.0.0</ModVersion>
     <ModId>jsonpatcheslib</ModId>
     <Description>Implements more convinient syntax and more functionality for patching JSON assets.</Description>
     <Side>universal</Side>
@@ -93,9 +93,6 @@
     <Reference Include="$(GameDirectory)/Lib/OpenTK*.dll" Private="false" />
     <!-- External libraries -->
     <Reference Include="$(ExternalLibDir)/**/*.dll" Private="false" Condition="'$(ExternalLibDir)' != ''" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="resources\assets\jsonpatchlib\jsonpatches\" />
   </ItemGroup>
 
   <!-- Creating local settings file -->

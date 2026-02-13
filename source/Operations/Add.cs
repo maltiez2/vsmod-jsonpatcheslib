@@ -10,13 +10,13 @@ public static partial class Operations
     {
         if (patch.Path == null)
         {
-            LoggerUtil.Error(api, typeof(Operations), "Replace operation json patch does not have Path specified");
+            LoggerUtil.Error(api, typeof(Operations), "Add operation json patch does not have Path specified");
             return false;
         }
 
         if (patch.Value == null)
         {
-            LoggerUtil.Error(api, typeof(Operations), "Replace operation json patch does not have Value specified");
+            LoggerUtil.Error(api, typeof(Operations), "Add operation json patch does not have Value specified");
             return false;
         }
 

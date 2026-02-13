@@ -194,10 +194,9 @@ public sealed class JsonPatchLibSystem : ModSystem
         {
             string wildcard = path[1..];
 
-            AssetLocation wildcardLocation = new AssetLocation(wildcard);
-
             return api.Assets.GetLocations("")
-                .Where(assetPath => WildcardUtil.Match(wildcardLocation, assetPath))
+                .Where(assetPath => 
+                WildcardUtil.Match(wildcard, assetPath.ToString()))
                 .Select(assetPath => assetPath.ToString())
                 .ToArray();
         }
