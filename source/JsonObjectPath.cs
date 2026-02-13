@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using HarmonyLib;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Vintagestory.API.Util;
 
@@ -172,10 +173,7 @@ public sealed class JsonObjectPath
 
         IEnumerable<JToken> fromObjects = tokens
             .OfType<JObject>()
-            .Where(a => a.ContainsKey(code))
-            .Select(a => a[code])
-            .OfType<JToken>()
-            .Where(a => a.Value<string>() == condition);
+            .Where(a => a.ContainsKey(code) && a[code]?.Value<string>() == condition);
 
         IEnumerable<JToken> fromProperties = tokens
             .OfType<JProperty>()

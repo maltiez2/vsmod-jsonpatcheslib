@@ -21,10 +21,30 @@ public static partial class Operations
             return false;
         }
 
-        values.Foreach(value =>
+        if (patch.Value?.Token is JValue token)
         {
-            value.Remove();
-        });
+            values
+                .OfType<JValue>()
+                .Where(value => value.Equals(token))
+                .Foreach(value =>
+            {
+                value.Remove();
+            });
+        }
+        else
+        {
+            values.Foreach(value =>
+            {
+                if (value.Parent is JProperty property)
+                {
+                    property.Remove();
+                }
+                else
+                {
+                    value.Remove();
+                }
+            });
+        }
 
         return true;
     }

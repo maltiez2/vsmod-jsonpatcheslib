@@ -125,12 +125,18 @@ public sealed class JsonPatchLibSystem : ModSystem
 
         foreach (string file in files)
         {
-            if (!jsonCache.TryGetValue(file, out (JToken token, IAsset asset) cachedAsset))
+            string filePath = file;
+            if (!filePath.EndsWith(".json"))
             {
-                IAsset asset = api.Assets.TryGet(file);
+                filePath = filePath + ".json";
+            }
+
+            if (!jsonCache.TryGetValue(filePath, out (JToken token, IAsset asset) cachedAsset))
+            {
+                IAsset asset = api.Assets.TryGet(filePath);
                 string jsonText = asset.ToText();
                 JToken token = JToken.Parse(jsonText);
-                jsonCache.Add(file, (token, asset));
+                jsonCache.Add(filePath, (token, asset));
                 cachedAsset = (token, asset);
             }
 
@@ -138,7 +144,11 @@ public sealed class JsonPatchLibSystem : ModSystem
 
             if (applied)
             {
-                affectedAssets.Add(file);
+                affectedAssets.Add(filePath);
+            }
+            else
+            {
+                LoggerUtil.Warn(api, typeof(JsonPatchLibSystem), $"Failed to apply patch for '{patch.Path?.OriginalPath()}' in '{patch.File}'");
             }
         }
     }

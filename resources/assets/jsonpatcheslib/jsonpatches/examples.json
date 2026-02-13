@@ -62,5 +62,13 @@
     "file": "game:itemtypes/toolhead/arrowhead.json",
     "frompath": "creativeinventory/temp/1",
     "path": "creativeinventory/jsonpatches/-"
+  },
+  {
+    "enabled": false,
+    "side": "server",
+    "op": "remove",
+    "file": "@game:itemtypes/*/arrowhead.json",
+    "path": "creativeinventory/jsonpatches/-",
+    "value": "*-steel"
   }
 ]
