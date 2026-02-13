@@ -5,7 +5,7 @@ namespace JsonPatchLib;
 
 internal static class LoggerUtil
 {
-    private const string _prefix = "[Json Patch lib]";
+    private const string _prefix = "[JSON Patches lib]";
 
     public static void Notify(ICoreAPI? api, object caller, string format) => api?.Logger?.Notification(Format(caller, format));
     public static void Notify(ICoreAPI? api, Type type, string format) => api?.Logger?.Notification(Format(type, format));

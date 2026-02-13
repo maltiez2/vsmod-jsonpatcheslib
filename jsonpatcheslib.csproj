@@ -1,11 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <!-- Mod info -->
   <PropertyGroup>
-    <ModName>Json Patches lib</ModName>
+    <ModName>JSON Patches lib</ModName>
     <ModType>code</ModType>
-    <ModVersion>1.2.0</ModVersion>
+    <ModVersion>1.2.1</ModVersion>
     <ModId>jsonpatcheslib</ModId>
-    <Description>Implements more convinient syntax and more functionality for patching JSON assets.</Description>
+    <Description>Implements more convenient syntax and more functionality for patching JSON assets.</Description>
     <Side>universal</Side>
     <RequiredOnClient>true</RequiredOnClient>
     <RequiredOnServer>true</RequiredOnServer>
