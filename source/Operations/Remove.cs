@@ -25,11 +25,11 @@ public static partial class Operations
         {
             values
                 .OfType<JValue>()
-                .Where(value => value.Equals(token))
+                .Where(value => Match(token, value))
                 .Foreach(value =>
-            {
-                value.Remove();
-            });
+                {
+                    value.Remove();
+                });
         }
         else
         {
@@ -47,5 +47,22 @@ public static partial class Operations
         }
 
         return true;
+    }
+
+    private static bool Match(JValue needle, JValue haystack)
+    {
+        string? wildcard = needle.Value<string>();
+        if (wildcard == null || !wildcard.StartsWith("@@"))
+        {
+            return needle.Equals(haystack);
+        }
+
+        string? value = haystack.Value<string>();
+        if (value == null)
+        {
+            return false;
+        }
+
+        return WildcardUtil.Match(wildcard[2..], value);
     }
 }

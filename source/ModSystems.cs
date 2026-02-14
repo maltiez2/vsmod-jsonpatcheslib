@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Diagnostics;
 using System.Text;
 using Vintagestory.API.Common;
 using Vintagestory.API.Util;
@@ -148,7 +149,7 @@ public sealed class JsonPatchLibSystem : ModSystem
             }
             else
             {
-                LoggerUtil.Warn(api, typeof(JsonPatchLibSystem), $"Failed to apply patch for '{patch.Path?.OriginalPath()}' in '{patch.File}'");
+                LoggerUtil.Warn(api, typeof(JsonPatchLibSystem), $"Failed to apply patch for '{patch.Path?.OriginalPath()}' in '{file}'");
             }
         }
     }
@@ -205,8 +206,7 @@ public sealed class JsonPatchLibSystem : ModSystem
             string wildcard = path[1..];
 
             return api.Assets.GetLocations("")
-                .Where(assetPath => 
-                WildcardUtil.Match(wildcard, assetPath.ToString()))
+                .Where(assetPath => WildcardUtil.Match(wildcard, assetPath.ToString()[..^5]))
                 .Select(assetPath => assetPath.ToString())
                 .ToArray();
         }
