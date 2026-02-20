@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System.Diagnostics;
 using System.Text;
 using Vintagestory.API.Common;
 using Vintagestory.API.Util;
@@ -18,39 +17,46 @@ public sealed class JsonPatchLibSystem : ModSystem
 
     public override void AssetsLoaded(ICoreAPI api)
     {
-        ApplyPatches(api, _jsonCache);
+        Dictionary<string, (JToken token, IAsset asset)> jsonCache = [];
 
-        _jsonCache.Clear();
+        ApplyPatches(api, jsonCache);
     }
 
 
 
     private const string _patchesDirectory = "jsonpatches";
-    private readonly Dictionary<AssetLocation, (JToken token, IAsset asset)> _jsonCache = [];
 
-    private static void ApplyPatches(ICoreAPI api, Dictionary<AssetLocation, (JToken token, IAsset asset)> jsonCache)
+    private static void ApplyPatches(ICoreAPI api, Dictionary<string, (JToken token, IAsset asset)> jsonCache)
     {
         List<IAsset> patchAssets = api.Assets.GetMany(_patchesDirectory);
 
         HashSet<string> loadedModIds = api.ModLoader.Mods.Select(mod => mod.Info.ModID).ToHashSet();
 
-        List<JsonPatch> patches = GetActivePatches(api, patchAssets, loadedModIds);
+        List<JsonPatchPack> patches = GetPatchesPacks(api, patchAssets);
 
-        List<JsonPatch> orderedPatches = patches.OrderByDescending(patch => patch.Priority).ToList();
+        List<(float priority, JsonPatchPack patches)> orderedPatches = OrderPatches(patches);
 
         List<string> affectedAssets = [];
 
-        foreach (JsonPatch patch in orderedPatches)
+        foreach ((float priority, JsonPatchPack pack) in orderedPatches)
         {
-            ApplyPatch(api, patch, affectedAssets, jsonCache);
+            if (affectedAssets.Contains(pack.AssetPath) && jsonCache.ContainsKey(pack.AssetPath))
+            {
+                pack.Patches = LoadPatchesFromToken(api, jsonCache[pack.AssetPath].token, pack.AssetPath);
+            }
+
+            foreach (JsonPatch patch in pack.Patches.Where(element => element.Priority == priority && CheckIfPatchActive(api, element, loadedModIds)))
+            {
+                ApplyPatch(api, patch, affectedAssets, jsonCache);
+            }
         }
 
         SaveAffectedAssets(api, affectedAssets, jsonCache);
     }
 
-    private static List<JsonPatch> GetActivePatches(ICoreAPI api, List<IAsset> assets, HashSet<string> loadedMods)
+    private static List<JsonPatchPack> GetPatchesPacks(ICoreAPI api, List<IAsset> assets)
     {
-        List<JsonPatch> result = [];
+        List<JsonPatchPack> result = [];
 
         foreach (IAsset asset in assets)
         {
@@ -65,9 +71,43 @@ public sealed class JsonPatchLibSystem : ModSystem
                 continue;
             }
 
-            patches
-                .Where(patch => CheckIfPatchActive(api, patch, loadedMods))
-                .Foreach(patch => result.Add(patch));
+            result.Add(new JsonPatchPack()
+            {
+                Patches = patches.ToArray(),
+                AssetPath = asset.Location
+            });
+        }
+
+        return result;
+    }
+
+    private static JsonPatch[] LoadPatchesFromToken(ICoreAPI api, JToken token, string path)
+    {
+        try
+        {
+            return token.ToObject<JsonPatch[]>() ?? [];
+        }
+        catch (Exception exception)
+        {
+            LoggerUtil.Error(api, typeof(JsonPatchLibSystem), $"Error on loading patches from file {path}:\n{exception}");
+            return [];
+        }
+    }
+
+    private static List<(float priority, JsonPatchPack patches)> OrderPatches(List<JsonPatchPack> packs)
+    {
+        List<float> priorities = packs
+            .SelectMany(pack => pack.Patches.Select(patch => patch.Priority))
+            .Distinct()
+            .OrderByDescending(element => element)
+            .ToList();
+
+        List<(float priority, JsonPatchPack patches)> result = [];
+        foreach (float priority in priorities)
+        {
+            packs
+                .Where(pack => pack.Patches.Contains(patch => patch.Priority == priority))
+                .Foreach(pack => result.Add((priority, pack)));
         }
 
         return result;
@@ -109,7 +149,7 @@ public sealed class JsonPatchLibSystem : ModSystem
         return true;
     }
 
-    private static void ApplyPatch(ICoreAPI api, JsonPatch patch, List<string> affectedAssets, Dictionary<AssetLocation, (JToken token, IAsset asset)> jsonCache)
+    private static void ApplyPatch(ICoreAPI api, JsonPatch patch, List<string> affectedAssets, Dictionary<string, (JToken token, IAsset asset)> jsonCache)
     {
         if (patch.File == null)
         {
@@ -169,7 +209,7 @@ public sealed class JsonPatchLibSystem : ModSystem
         };
     }
 
-    private static void SaveAffectedAssets(ICoreAPI api, List<string> affectedAssets, Dictionary<AssetLocation, (JToken token, IAsset asset)> jsonCache)
+    private static void SaveAffectedAssets(ICoreAPI api, List<string> affectedAssets, Dictionary<string, (JToken token, IAsset asset)> jsonCache)
     {
         StringBuilder fileContent = new(4096);
 

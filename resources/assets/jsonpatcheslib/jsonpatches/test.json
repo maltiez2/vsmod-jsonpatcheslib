@@ -1,0 +1,11 @@
+[
+  {
+    "enabled": false,
+    "side": "server",
+    "op": "replace",
+    "file": "jsonpatcheslib:jsonpatches/examples.json",
+    "path": "-/enabled",
+    "value": true,
+    "priority": 1
+  }
+]

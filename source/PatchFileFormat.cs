@@ -107,3 +107,9 @@ public class JsonPatch
     [JsonProperty, JsonConverter(typeof(JsonAttributesConverter))]
     public JsonObject? Value { get; set; }
 }
+
+public class JsonPatchPack
+{
+    public JsonPatch[] Patches { get; set; } = [];
+    public string AssetPath { get; set; } = "";
+}

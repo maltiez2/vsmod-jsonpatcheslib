@@ -27,7 +27,10 @@ public static partial class Operations
             IEnumerable<JArray> parentArrays = parents.OfType<JArray>();
             parentArrays.Foreach(parent =>
             {
-                parent.Add(patch.Value.Token);
+                if (patch.Value.Token != null)
+                {
+                    parent.Add(patch.Value.Token);
+                }
             });
             return parentArrays.Any();
         }
@@ -37,7 +40,10 @@ public static partial class Operations
             IEnumerable<JArray> parentArrays = parents.OfType<JArray>();
             parentArrays.Foreach(parent =>
             {
-                parent.Insert(index, patch.Value.Token);
+                if (patch.Value.Token != null)
+                {
+                    parent.Insert(index, patch.Value.Token);
+                }
             });
             return parentArrays.Any();
         }

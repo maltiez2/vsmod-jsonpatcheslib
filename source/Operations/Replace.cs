@@ -29,7 +29,10 @@ public static partial class Operations
 
         values.Foreach(value =>
         {
-            value.Replace(patch.Value.Token);
+            if (patch.Value.Token != null)
+            {
+                value.Replace(patch.Value.Token);
+            }
         });
 
         return true;
