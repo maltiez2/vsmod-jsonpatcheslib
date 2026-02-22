@@ -27,7 +27,7 @@ public static partial class Operations
         }
 
         IEnumerable<JToken> children = valueArray.OfType<JToken>();
-        IEnumerable<JToken> parents = patch.Path.GetParent(asset, out string child);
+        IEnumerable<JToken> parents = patch.Path.GetParent(asset, out string child, api);
 
         if (child == "-")
         {

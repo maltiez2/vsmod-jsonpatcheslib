@@ -20,7 +20,7 @@ public static partial class Operations
             return false;
         }
 
-        IEnumerable<JToken> mergeIntoTokens = patch.Path.Get(asset);
+        IEnumerable<JToken> mergeIntoTokens = patch.Path.Get(asset, api);
 
 
         if (patch.Value.Token is JObject valueObject)

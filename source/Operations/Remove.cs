@@ -14,7 +14,7 @@ public static partial class Operations
             return false;
         }
 
-        IEnumerable<JToken> values = patch.Path.Get(asset);
+        IEnumerable<JToken> values = patch.Path.Get(asset, api);
 
         if (!values.Any())
         {

@@ -1,7 +1,9 @@
 ﻿using HarmonyLib;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Vintagestory.API.Common;
 using Vintagestory.API.Util;
+using static OpenTK.Graphics.OpenGL.GL;
 
 namespace JsonPatchLib;
 
@@ -15,18 +17,23 @@ public sealed class JsonObjectPath
         _originalPath = path;
     }
 
-    public List<JToken> Get(JToken tree)
+    public List<JToken> Get(JToken tree, ICoreAPI api)
     {
         List<JToken> result = [tree];
-        foreach (PathElementDelegate element in _path)
+        for (int pathElementIndex = 0; pathElementIndex < _path.Count; pathElementIndex++)
         {
-            result = element.Invoke(result);
+            result = _path[pathElementIndex].Invoke(result);
+            if (result.Count == 0)
+            {
+                LoggerUtil.Warn(api, this, $"Wast not able traverse path '{_originalPath}', failed at token '{_tokens[pathElementIndex]}'.");
+                return result;
+            }
         }
         return result;
     }
-    public int Set(JToken tree, JToken value)
+    public int Set(JToken tree, JToken value, ICoreAPI api)
     {
-        List<JToken> result = Get(tree);
+        List<JToken> result = Get(tree, api);
 
         foreach (JToken element in result)
         {
@@ -35,12 +42,18 @@ public sealed class JsonObjectPath
 
         return result.Count;
     }
-    public List<JToken> GetParent(JToken tree, out string child)
+    public List<JToken> GetParent(JToken tree, out string child, ICoreAPI api)
     {
         List<JToken> result = [tree];
         for (int elementIndex = 0;  elementIndex < _path.Count - 1; elementIndex++)
         {
             result = _path[elementIndex].Invoke(result);
+            if (result.Count == 0)
+            {
+                LoggerUtil.Warn(api, this, $"Wast not able traverse path '{_originalPath}', failed at token '{_tokens[elementIndex]}'.");
+                child = _tokens[elementIndex + 1];
+                return result;
+            }
         }
         child = _tokens[^1];
         return result;

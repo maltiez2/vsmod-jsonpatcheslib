@@ -20,7 +20,7 @@ public static partial class Operations
             return false;
         }
 
-        IEnumerable<JToken> valuesToCopy = patch.FromPath.Get(asset);
+        IEnumerable<JToken> valuesToCopy = patch.FromPath.Get(asset, api);
 
         if (valuesToCopy.Count() != 1)
         {
@@ -32,7 +32,7 @@ public static partial class Operations
 
         valueToCopy.Remove();
 
-        IEnumerable<JToken> parents = patch.Path.GetParent(asset, out string child);
+        IEnumerable<JToken> parents = patch.Path.GetParent(asset, out string child, api);
 
         if (child == "-")
         {

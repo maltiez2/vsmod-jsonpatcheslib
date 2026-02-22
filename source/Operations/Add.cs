@@ -20,31 +20,31 @@ public static partial class Operations
             return false;
         }
 
-        IEnumerable<JToken> parents = patch.Path.GetParent(asset, out string child);
+        IEnumerable<JToken> parents = patch.Path.GetParent(asset, out string child, api);
 
         if (child == "-")
         {
             IEnumerable<JArray> parentArrays = parents.OfType<JArray>();
-            parentArrays.Foreach(parent =>
+            foreach (JArray parent in parentArrays)
             {
                 if (patch.Value.Token != null)
                 {
                     parent.Add(patch.Value.Token);
                 }
-            });
+            }
             return parentArrays.Any();
         }
 
         if (int.TryParse(child, out int index))
         {
             IEnumerable<JArray> parentArrays = parents.OfType<JArray>();
-            parentArrays.Foreach(parent =>
+            foreach (JArray parent in parentArrays)
             {
                 if (patch.Value.Token != null)
                 {
                     parent.Insert(index, patch.Value.Token);
                 }
-            });
+            }
             return parentArrays.Any();
         }
 
@@ -55,10 +55,13 @@ public static partial class Operations
             return false;
         }
 
-        validParents.Foreach(value =>
+        foreach (JObject parent in validParents)
         {
-            value.Add(child, patch.Value.Token);
-        });
+            if (patch.Value.Token != null)
+            {
+                parent.Add(child, patch.Value.Token);
+            }
+        }
 
         return true;
     }
