@@ -1,9 +1,7 @@
-﻿using HarmonyLib;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Vintagestory.API.Common;
 using Vintagestory.API.Util;
-using static OpenTK.Graphics.OpenGL.GL;
 
 namespace JsonPatchLib;
 
@@ -25,7 +23,7 @@ public sealed class JsonObjectPath
             result = _path[pathElementIndex].Invoke(result);
             if (result.Count == 0)
             {
-                LoggerUtil.Warn(api, this, $"Wast not able traverse path '{_originalPath}', failed at token '{_tokens[pathElementIndex]}'.");
+                LoggerUtil.Warn(api, this, $"Was not able to traverse path '{_originalPath}', failed at token '{_tokens[pathElementIndex]}'.");
                 return result;
             }
         }
@@ -45,12 +43,12 @@ public sealed class JsonObjectPath
     public List<JToken> GetParent(JToken tree, out string child, ICoreAPI api)
     {
         List<JToken> result = [tree];
-        for (int elementIndex = 0;  elementIndex < _path.Count - 1; elementIndex++)
+        for (int elementIndex = 0; elementIndex < _path.Count - 1; elementIndex++)
         {
             result = _path[elementIndex].Invoke(result);
             if (result.Count == 0)
             {
-                LoggerUtil.Warn(api, this, $"Wast not able traverse path '{_originalPath}', failed at token '{_tokens[elementIndex]}'.");
+                LoggerUtil.Warn(api, this, $"Was not able to traverse path '{_originalPath}', failed at token '{_tokens[elementIndex]}'.");
                 child = _tokens[elementIndex + 1];
                 return result;
             }
@@ -75,7 +73,7 @@ public sealed class JsonObjectPath
         }
         else
         {
-            if (element == "-") return tree => PathElementByAllIndexes(tree);
+            if (element == "-") return PathElementByAllIndexes;
 
             PathElementDelegate? rangeResult = TryParseRange(element);
             if (rangeResult != null) return rangeResult;
@@ -197,7 +195,7 @@ public sealed class JsonObjectPath
 
     private static PathElementDelegate? TryParseRange(string element)
     {
-        if (!element.Contains("-")) return null;
+        if (!element.Contains('-')) return null;
 
         string[] indexes = element.Split("-");
         if (indexes.Length != 2) return null;

@@ -62,7 +62,7 @@ internal static class LoggerUtil
         if (type.IsGenericType)
         {
             string obj = type.Name.Split('`', StringSplitOptions.RemoveEmptyEntries)[0];
-            string text = type.GetGenericArguments().Select(new System.Func<Type, string>(GetTypeName)).Aggregate((string first, string second) => first + "," + second);
+            string text = type.GetGenericArguments().Select(new System.Func<Type, string>(GetTypeName)).Aggregate((first, second) => first + "," + second);
             return obj + "<" + text + ">";
         }
 
@@ -74,7 +74,7 @@ internal static class LoggerUtil
         if (type.IsGenericType)
         {
             string obj = type.Name.Split('`', StringSplitOptions.RemoveEmptyEntries)[0];
-            string text = type.GetGenericArguments().Select(new System.Func<Type, string>(GetTypeName)).Aggregate((string first, string second) => first + "," + second);
+            string text = type.GetGenericArguments().Select(new System.Func<Type, string>(GetTypeName)).Aggregate((first, second) => first + "," + second);
             return obj + "<" + text + ">";
         }
 

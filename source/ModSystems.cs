@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System.Diagnostics;
 using System.Text;
 using Vintagestory.API.Common;
 using Vintagestory.API.Util;
@@ -170,7 +169,7 @@ public sealed class JsonPatchLibSystem : ModSystem
             string filePath = file;
             if (!filePath.EndsWith(".json"))
             {
-                filePath = filePath + ".json";
+                filePath += ".json";
             }
 
             if (!jsonCache.TryGetValue(filePath, out (JToken token, IAsset asset) cachedAsset))
@@ -229,8 +228,6 @@ public sealed class JsonPatchLibSystem : ModSystem
                 {
                     cachedData.token.WriteTo(jsonWriter);
                 }
-
-                //Debug.WriteLine($"\n\n\n{fileLoc}\n\n{fileContent}");
 
                 cachedData.asset.Data = Encoding.UTF8.GetBytes(fileContent.ToString());
                 cachedData.asset.IsPatched = true;
