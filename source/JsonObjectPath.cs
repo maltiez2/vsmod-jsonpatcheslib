@@ -108,7 +108,7 @@ public sealed class JsonObjectPath
         foreach (JArray attributesArray in attributes.OfType<JArray>())
         {
             int size = attributesArray.Count;
-            for (int i = Math.Max(0, start); i < Math.Min(end, size); i++)
+            for (int i = Math.Max(0, start); i < Math.Min(end + 1, size); i++)
             {
                 result.Add(attributesArray[i]);
             }
