@@ -3,7 +3,7 @@
   <PropertyGroup>
     <ModName>JSON Patches lib</ModName>
     <ModType>code</ModType>
-    <ModVersion>1.4.3</ModVersion>
+    <ModVersion>1.4.4</ModVersion>
     <ModId>jsonpatcheslib</ModId>
     <Description>Implements more convenient syntax and more functionality for patching JSON assets.</Description>
     <Side>universal</Side>

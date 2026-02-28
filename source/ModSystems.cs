@@ -174,7 +174,12 @@ public sealed class JsonPatchLibSystem : ModSystem
 
             if (!jsonCache.TryGetValue(filePath, out (JToken token, IAsset asset) cachedAsset))
             {
-                IAsset asset = api.Assets.TryGet(filePath);
+                IAsset? asset = api.Assets.TryGet(filePath);
+                if (asset == null)
+                {
+                    LoggerUtil.Warn(api, typeof(JsonPatchLibSystem), $"Failed to find asset: {file}");
+                    continue;
+                }
                 string jsonText = asset.ToText();
                 JToken token = JToken.Parse(jsonText);
                 jsonCache.Add(filePath, (token, asset));
