@@ -210,6 +210,7 @@ public sealed class JsonPatchLibSystem : ModSystem
             JsonPatchOperationType.Copy => Operations.Copy(api, patch, asset),
             JsonPatchOperationType.Move => Operations.Move(api, patch, asset),
             JsonPatchOperationType.AddMerge => Operations.AddMerge(api, patch, asset),
+            JsonPatchOperationType.Expression => Operations.Expression(api, patch, asset),
             _ => false
         };
     }
@@ -249,6 +250,10 @@ public sealed class JsonPatchLibSystem : ModSystem
         if (path.StartsWith('@'))
         {
             string wildcard = path[1..];
+            if (wildcard.EndsWith(".json"))
+            {
+                wildcard = wildcard[..^5];
+            }
 
             return api.Assets.GetLocations("")
                 .Where(assetPath => WildcardUtil.Match(wildcard, assetPath.ToString()[..^5]))

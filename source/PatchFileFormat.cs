@@ -43,7 +43,12 @@ public enum JsonPatchOperationType
     /// <summary>
     /// Add merge is similar to <see cref="Add"/>, however if the target is an array, then the current value and patched value will merge together for improved compatibility.
     /// </summary>
-    AddMerge
+    AddMerge,
+
+    /// <summary>
+    /// Uses expressions to replace value by path.
+    /// </summary>
+    Expression
 }
 
 /// <summary>

@@ -7,5 +7,21 @@
     "path": "-/enabled",
     "value": true,
     "priority": 1
+  },
+  {
+    "enabled": false,
+    "side": "server",
+    "op": "add",
+    "file": "@game:itemtypes/*/arrowhead.json",
+    "path": "maxstacksize",
+    "value": 12
+  },
+  {
+    "enabled": false,
+    "side": "server",
+    "op": "expression",
+    "file": "@game:itemtypes/*/arrowhead.json",
+    "path": "maxstacksize",
+    "value": "value / 8 * 3"
   }
 ]
