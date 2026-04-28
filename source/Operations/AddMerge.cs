@@ -22,6 +22,10 @@ public static partial class Operations
 
         IEnumerable<JToken> mergeIntoTokens = patch.Path.Get(asset, api);
 
+        if (!mergeIntoTokens.Any())
+        {
+            return false;
+        }
 
         if (patch.Value.Token is JObject valueObject)
         {

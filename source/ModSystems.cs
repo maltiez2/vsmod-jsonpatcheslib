@@ -161,7 +161,7 @@ public sealed class JsonPatchLibSystem : ModSystem
 
         if (files.Length == 0)
         {
-            LoggerUtil.Warn(api, typeof(JsonPatchLibSystem), $"Found no files by path: {patch.File}");
+            LoggerUtil.Verbose(api, typeof(JsonPatchLibSystem), $"Found no files by path: {patch.File}");
         }
 
         foreach (string file in files)
@@ -177,7 +177,7 @@ public sealed class JsonPatchLibSystem : ModSystem
                 IAsset? asset = api.Assets.TryGet(filePath);
                 if (asset == null)
                 {
-                    LoggerUtil.Warn(api, typeof(JsonPatchLibSystem), $"Failed to find asset: {file}");
+                    LoggerUtil.Verbose(api, typeof(JsonPatchLibSystem), $"Failed to find asset: {file}");
                     continue;
                 }
                 string jsonText = asset.ToText();
@@ -194,7 +194,7 @@ public sealed class JsonPatchLibSystem : ModSystem
             }
             else
             {
-                LoggerUtil.Warn(api, typeof(JsonPatchLibSystem), $"Failed to apply patch for '{patch.Path?.OriginalPath()}' in '{file}'");
+                LoggerUtil.Verbose(api, typeof(JsonPatchLibSystem), $"Failed to apply patch for '{patch.Path?.OriginalPath()}' in '{file}'");
             }
         }
     }

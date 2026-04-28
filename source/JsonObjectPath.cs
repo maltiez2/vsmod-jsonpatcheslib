@@ -23,7 +23,7 @@ public sealed class JsonObjectPath
             result = _path[pathElementIndex].Invoke(result);
             if (result.Count == 0)
             {
-                LoggerUtil.Warn(api, this, $"Was not able to traverse path '{_originalPath}', failed at token '{_tokens[pathElementIndex]}'.");
+                LoggerUtil.Verbose(api, this, $"Was not able to traverse path '{_originalPath}', failed at token '{_tokens[pathElementIndex]}'.");
                 return result;
             }
         }

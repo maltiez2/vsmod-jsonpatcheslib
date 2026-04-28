@@ -22,7 +22,7 @@ public static partial class Operations
 
         IEnumerable<JToken> valuesToCopy = patch.FromPath.Get(asset, api);
 
-        if (valuesToCopy.Count() != 1)
+        if (valuesToCopy.Count() > 1)
         {
             LoggerUtil.Error(api, typeof(Operations), "Copy operation json patch has FromPath specified but it returns multiple paths (or no paths). It should return only one.");
             return false;
